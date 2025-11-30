@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Search, Loader2, Users, X, ShoppingCart } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Product {
     id: string;
@@ -17,6 +18,7 @@ interface ResellerProduct {
 }
 
 export default function ResellersPage() {
+    const { user } = useAuth();
     const [resellerProducts, setResellerProducts] = useState<ResellerProduct[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
@@ -139,7 +141,7 @@ export default function ResellersPage() {
                 </div>
 
                 <div className="flex gap-4">
-                    {selectedItems.size > 0 && (
+                    {user?.role !== 'VIEWER' && selectedItems.size > 0 && (
                         <button
                             onClick={handleRegisterSale}
                             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-green-500/20 animate-in fade-in"
@@ -148,13 +150,15 @@ export default function ResellersPage() {
                             <span>Registrar Venta ({selectedItems.size})</span>
                         </button>
                     )}
-                    <button
-                        onClick={() => setShowModal(true)}
-                        className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-purple-500/20"
-                    >
-                        <Plus className="w-5 h-5" />
-                        <span>Agregar Producto</span>
-                    </button>
+                    {user?.role !== 'VIEWER' && (
+                        <button
+                            onClick={() => setShowModal(true)}
+                            className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-purple-500/20"
+                        >
+                            <Plus className="w-5 h-5" />
+                            <span>Agregar Producto</span>
+                        </button>
+                    )}
                 </div>
             </div>
 

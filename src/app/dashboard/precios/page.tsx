@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Search, Loader2, Tag, ShoppingCart } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Product {
     id: string;
@@ -12,6 +13,7 @@ interface Product {
 }
 
 export default function PriceListPage() {
+    const { user } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -92,7 +94,7 @@ export default function PriceListPage() {
                     <p className="text-gray-400 mt-2">Tus productos y precios de venta al público.</p>
                 </div>
 
-                {selectedProducts.size > 0 && (
+                {user?.role !== 'VIEWER' && selectedProducts.size > 0 && (
                     <button
                         onClick={handleRegisterSale}
                         className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-green-500/20 flex items-center gap-2 animate-in fade-in slide-in-from-top-4"

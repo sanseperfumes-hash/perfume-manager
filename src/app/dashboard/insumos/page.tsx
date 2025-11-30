@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Search, Edit2, Trash2, Loader2, X } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Material {
     id: string;
@@ -13,6 +14,7 @@ interface Material {
 }
 
 export default function InsumosPage() {
+    const { user } = useAuth();
     const [materials, setMaterials] = useState<Material[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -133,13 +135,15 @@ export default function InsumosPage() {
                     <h1 className="text-3xl font-bold text-white">Insumos</h1>
                     <p className="text-gray-400 mt-2">Gestiona tus materias primas y costos.</p>
                 </div>
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-purple-500/20"
-                >
-                    <Plus className="w-5 h-5" />
-                    <span>Nuevo Insumo</span>
-                </button>
+                {user?.role !== 'VIEWER' && (
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-purple-500/20"
+                    >
+                        <Plus className="w-5 h-5" />
+                        <span>Nuevo Insumo</span>
+                    </button>
+                )}
             </div>
 
             {/* Search Bar */}
@@ -187,20 +191,22 @@ export default function InsumosPage() {
                                         ${material.costPerUnit.toFixed(2)} / {material.unit}
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <div className="flex justify-end space-x-2">
-                                            <button
-                                                onClick={() => handleEdit(material)}
-                                                className="p-2 hover:bg-white/10 rounded-lg text-blue-400 transition-colors"
-                                            >
-                                                <Edit2 className="w-4 h-4" />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(material.id)}
-                                                className="p-2 hover:bg-white/10 rounded-lg text-red-400 transition-colors"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
+                                        {user?.role !== 'VIEWER' && (
+                                            <div className="flex justify-end space-x-2">
+                                                <button
+                                                    onClick={() => handleEdit(material)}
+                                                    className="p-2 hover:bg-white/10 rounded-lg text-blue-400 transition-colors"
+                                                >
+                                                    <Edit2 className="w-4 h-4" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(material.id)}
+                                                    className="p-2 hover:bg-white/10 rounded-lg text-red-400 transition-colors"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </button>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

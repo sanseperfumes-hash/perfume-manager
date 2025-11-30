@@ -11,9 +11,22 @@ interface User {
     createdAt: string;
 }
 
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+
 export default function UsersPage() {
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!authLoading && user?.role !== 'ADMIN') {
+            router.push('/dashboard');
+        }
+    }, [user, authLoading, router]);
+
+    if (authLoading || user?.role !== 'ADMIN') return null;
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
 
