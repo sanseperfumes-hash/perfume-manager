@@ -48,7 +48,7 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
                     const productHtml = await productRes.text();
                     const $p = cheerio.load(productHtml);
 
-                    const fullName = $p('.product-title').text().trim() || $p('h1').text().trim();
+                    const fullName = $p('h1.product_title').text().trim() || $p('.product-title').first().text().trim();
                     const groupName = fullName
                         .replace(/\s*\([FMU]\)\s*X\s*KG/i, '')
                         .replace(/\s*X\s*KG/i, '')
@@ -82,7 +82,7 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
                         }
                     });
 
-                    if (variants.length > 0) {
+                    if (variants.length > 0 && groupName) {
                         allProducts.push({
                             name: fullName,
                             groupName,
