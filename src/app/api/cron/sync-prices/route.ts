@@ -52,16 +52,9 @@ export async function GET(request: Request) {
                         where: { id: existing.id },
                         data: {
                             purchaseCost: variant.price,
-                            purchaseQuantity: quantity,
-                            costPerUnit: variant.price > 0 ? variant.price / quantity : 0,
-                            lastUpdated: new Date(),
-                            supplierUrl: product.url,
-                            supplier: 'Van Rossum',
-                            priceStatus: variant.priceStatus,
-                            groupName: product.groupName,
-                            gender: product.gender as any,
-                            // Only set type if missing
-                            typeId: existing.typeId || esenciaType.id
+                            costPerUnit: variant.price / quantity,
+                            priceStatus: variant.status,
+                            lastUpdated: new Date()
                         }
                     });
                     updatedCount++;
@@ -69,16 +62,15 @@ export async function GET(request: Request) {
                     await prisma.material.create({
                         data: {
                             name: materialName,
-                            unit: 'g',
                             purchaseCost: variant.price,
                             purchaseQuantity: quantity,
-                            costPerUnit: variant.price > 0 ? variant.price / quantity : 0,
-                            groupName: product.groupName,
-                            supplierUrl: product.url,
+                            unit: 'g',
+                            costPerUnit: variant.price / quantity,
                             supplier: 'Van Rossum',
-                            priceStatus: variant.priceStatus,
-                            gender: product.gender as any,
-                            lastUpdated: new Date(),
+                            supplierUrl: product.url,
+                            groupName: product.groupName,
+                            priceStatus: variant.status,
+                            gender: product.gender,
                             typeId: esenciaType.id
                         }
                     });
@@ -87,40 +79,103 @@ export async function GET(request: Request) {
             }
         }
 
-        // Delete materials from Van Rossum that no longer exist on the website
-        const vanRossumMaterials = await prisma.material.findMany({
-            where: {
-                supplier: 'Van Rossum'
-            }
-        });
+        // --- Auto-generate Products Logic ---
+        console.log('Auto-generating products...');
 
-        for (const material of vanRossumMaterials) {
-            if (!scrapedMaterialNames.has(material.name)) {
-                // This material no longer exists on Van Rossum website
-                try {
-                    await prisma.material.delete({
-                        where: { id: material.id }
+        // 1. Ensure Base Materials Exist
+        const baseMaterials = [
+            { name: 'Alcohol', cost: 3000, quantity: 1000, unit: 'ml' },
+            { name: 'Caja', cost: 500, quantity: 1, unit: 'u' },
+            { name: 'Etiquetas', cost: 100, quantity: 1, unit: 'u' },
+            { name: 'Frasco masculino', cost: 2000, quantity: 1, unit: 'u' },
+            { name: 'Frascos Femeninos', cost: 2000, quantity: 1, unit: 'u' }
+        ];
+
+        for (const base of baseMaterials) {
+            const exists = await prisma.material.findFirst({ where: { name: { contains: base.name } } });
+            if (!exists) {
+                await prisma.material.create({
+                    data: {
+                        name: base.name,
+                        purchaseCost: base.cost,
+                        purchaseQuantity: base.quantity,
+                        unit: base.unit,
+                        costPerUnit: base.cost / base.quantity,
+                        supplier: 'Otro',
+                        priceStatus: 'available'
+                    }
+                });
+                console.log(`Created base material: ${base.name}`);
+            }
+        }
+
+        // 2. Fetch Base Materials
+        const alcohol = await prisma.material.findFirst({ where: { name: { contains: 'Alcohol' } } });
+        const caja = await prisma.material.findFirst({ where: { name: { contains: 'Caja' } } });
+        const etiquetas = await prisma.material.findFirst({ where: { name: { contains: 'Etiquetas' } } });
+        const frascoM = await prisma.material.findFirst({ where: { OR: [{ name: 'Frasco masculino' }, { name: 'Frascos masculinos' }] } });
+        const frascoF = await prisma.material.findFirst({ where: { name: { contains: 'Frascos Femeninos' } } });
+
+        let productsGenerated = 0;
+        let productsUpdated = 0;
+
+        if (alcohol && caja && etiquetas && frascoM && frascoF) {
+            const allEssences = await prisma.material.findMany({
+                where: { type: { name: 'Esencia' } }
+            });
+
+            for (const essence of allEssences) {
+                if (essence.gender !== 'MALE' && essence.gender !== 'FEMALE' && essence.gender !== 'UNISEX') continue;
+
+                const productName = `Perfume ${essence.name}`;
+                const existingProduct = await prisma.product.findFirst({ where: { name: productName } });
+                const bottle = essence.gender === 'FEMALE' ? frascoF : frascoM;
+
+                const cost =
+                    (essence.costPerUnit * 15) +
+                    (alcohol.costPerUnit * 80) +
+                    (bottle.costPerUnit * 1) +
+                    (caja.costPerUnit * 1) +
+                    (etiquetas.costPerUnit * 1);
+
+                if (!existingProduct) {
+                    await prisma.product.create({
+                        data: {
+                            name: productName,
+                            cost,
+                            profitMargin: 100,
+                            finalPrice: cost * 2,
+                            gender: essence.gender,
+                            ingredients: {
+                                create: [
+                                    { materialId: essence.id, quantityUsed: 15 },
+                                    { materialId: alcohol.id, quantityUsed: 80 },
+                                    { materialId: bottle.id, quantityUsed: 1 },
+                                    { materialId: caja.id, quantityUsed: 1 },
+                                    { materialId: etiquetas.id, quantityUsed: 1 }
+                                ]
+                            }
+                        }
                     });
-                    deletedCount++;
-                    console.log(`Deleted obsolete material: ${material.name}`);
-                } catch (error) {
-                    // If deletion fails (e.g., foreign key constraint), just log it
-                    console.warn(`Could not delete material ${material.name}:`, error);
+                    productsGenerated++;
+                } else {
+                    await prisma.product.update({
+                        where: { id: existingProduct.id },
+                        data: { cost, finalPrice: cost * (1 + (existingProduct.profitMargin / 100)) }
+                    });
+                    productsUpdated++;
                 }
             }
         }
 
         return NextResponse.json({
             success: true,
-            scraped: products.length,
-            updated: updatedCount,
-            created: createdCount,
-            deleted: deletedCount
+            materials: { updated: updatedCount, created: createdCount },
+            products: { generated: productsGenerated, updated: productsUpdated }
         });
 
     } catch (error) {
         console.error('Sync failed:', error);
-        return NextResponse.json({ error: 'Sync failed' }, { status: 500 });
+        return NextResponse.json({ error: 'Sync failed', details: error }, { status: 500 });
     }
 }
-
