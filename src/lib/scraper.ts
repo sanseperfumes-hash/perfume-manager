@@ -24,7 +24,6 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
         try {
             console.log(`Scraping category: ${categoryUrl}`);
             const response = await fetch(categoryUrl);
-            const response = await fetch(categoryUrl);
             const html = await response.text();
             const $ = cheerio.load(html);
 
