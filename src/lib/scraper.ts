@@ -62,55 +62,22 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
 
                     // Look for price inputs or text
                     // Based on inspection: "Botella de 30 gramos" followed by price
-                    // Or hidden inputs like <input type="hidden" value="30534.00273" id="price_unit_8260">
-                    // But text is safer if IDs change.
-
-                    // Let's try to find the label "Botella de X gramos" and the associated price
-                    // This part is tricky without exact DOM structure, but we saw "Botella de 30 gramos" in text
-
-                    const bodyText = $p('body').text();
-
-                    // Regex to find prices for 30g and 100g
-                    // Pattern: "Botella de 30 gramos" ... "$ 30.534,00"
-                    const sizePatterns = [
-                        { size: '30g', regex: /Botella de 30 gramos[\s\S]*?\$([\d.,]+)/ },
-                        { size: '100g', regex: /Botella de 100 gramos[\s\S]*?\$([\d.,]+)/ },
-                        { size: '15g', regex: /Botella de 15 gramos[\s\S]*?\$([\d.,]+)/ }
-                    ];
-
-                    for (const pattern of sizePatterns) {
-                        const match = bodyText.match(pattern.regex);
-                        if (match && match[1]) {
-                            // Parse price: "30.534,00" -> 30534.00
-                            const priceStr = match[1].replace(/\./g, '').replace(',', '.');
-                            const price = parseFloat(priceStr);
-                            if (!isNaN(price)) {
-                                variants.push({ size: pattern.size, price });
-                            }
-                        }
-                    }
-
-                    if (variants.length > 0) {
-                        allProducts.push({
-                            name: fullName,
-                            groupName,
-                            url: productUrl,
-                            variants
-                        });
-                    }
-
-                } catch (error) {
-                    console.error(`Error scraping product ${link}:`, error);
-                }
-
-                // Small delay to be nice
-                await new Promise(r => setTimeout(r, 500));
+                    variants
+                });
             }
 
         } catch (error) {
-            console.error(`Error scraping category ${categoryUrl}:`, error);
+            console.error(`Error scraping product ${link}:`, error);
         }
+
+        // Small delay to be nice
+        await new Promise(r => setTimeout(r, 500));
     }
 
-    return allProducts;
+} catch (error) {
+    console.error(`Error scraping category ${categoryUrl}:`, error);
+}
+    }
+
+return allProducts;
 }
