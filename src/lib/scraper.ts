@@ -24,32 +24,6 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
         try {
             console.log(`Scraping category: ${categoryUrl}`);
             const response = await fetch(categoryUrl);
-            ```typescript
-import * as cheerio from 'cheerio';
-
-interface ScrapedProduct {
-    name: string;
-    groupName: string;
-    url: string;
-    variants: {
-        size: string; // "30g", "100g", "15g"
-        price: number;
-    }[];
-}
-
-const BASE_URL = 'https://vanrossum.com.ar';
-const CATEGORY_URLS = [
-    'https://vanrossum.com.ar/productos/00021', // Femenino
-    'https://vanrossum.com.ar/productos/00022', // Masculino
-    'https://vanrossum.com.ar/productos/00024', // Unisex
-];
-
-export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
-    const allProducts: ScrapedProduct[] = [];
-
-    for (const categoryUrl of CATEGORY_URLS) {
-        try {
-            console.log(`Scraping category: ${ categoryUrl } `);
             const response = await fetch(categoryUrl);
             const html = await response.text();
             const $ = cheerio.load(html);
@@ -64,12 +38,12 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
                 }
             });
 
-            console.log(`Found ${ productLinks.length } products in category.`);
+            console.log(`Found ${productLinks.length} products in category.`);
 
             for (const link of productLinks) {
                 try {
-                    const productUrl = link.startsWith('http') ? link : `${ BASE_URL }${ link } `;
-                    console.log(`Scraping product: ${ productUrl } `);
+                    const productUrl = link.startsWith('http') ? link : `${BASE_URL}${link}`;
+                    console.log(`Scraping product: ${productUrl}`);
 
                     const productRes = await fetch(productUrl);
                     const productHtml = await productRes.text();
@@ -119,18 +93,17 @@ export async function scrapeVanRossum(): Promise<ScrapedProduct[]> {
                     }
 
                 } catch (error) {
-                    console.error(`Error scraping product ${ link }: `, error);
+                    console.error(`Error scraping product ${link}:`, error);
                 }
-                
+
                 // Small delay
                 await new Promise(r => setTimeout(r, 200));
             }
 
         } catch (error) {
-            console.error(`Error scraping category ${ categoryUrl }: `, error);
+            console.error(`Error scraping category ${categoryUrl}:`, error);
         }
     }
 
     return allProducts;
 }
-```
