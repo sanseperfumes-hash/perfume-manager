@@ -1,4 +1,25 @@
-export default function DashboardPage() {
+import { PrismaClient } from '@prisma/client';
+import { formatPrice } from '@/lib/utils';
+
+const prisma = new PrismaClient();
+
+export const dynamic = 'force-dynamic';
+
+export default async function DashboardPage() {
+    const [
+        materialCount,
+        productCount,
+        inventoryValue
+    ] = await Promise.all([
+        prisma.material.count(),
+        prisma.product.count(),
+        prisma.material.aggregate({
+            _sum: {
+                purchaseCost: true
+            }
+        })
+    ]);
+
     return (
         <div>
             <header className="mb-8">
@@ -10,17 +31,19 @@ export default function DashboardPage() {
                 {/* Stats Cards */}
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-xl">
                     <h3 className="text-gray-400 text-sm font-medium">Total Insumos</h3>
-                    <p className="text-3xl font-bold text-white mt-2">24</p>
+                    <p className="text-3xl font-bold text-white mt-2">{materialCount}</p>
                 </div>
 
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-xl">
                     <h3 className="text-gray-400 text-sm font-medium">Productos Activos</h3>
-                    <p className="text-3xl font-bold text-white mt-2">12</p>
+                    <p className="text-3xl font-bold text-white mt-2">{productCount}</p>
                 </div>
 
                 <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-xl">
-                    <h3 className="text-gray-400 text-sm font-medium">Valor Inventario</h3>
-                    <p className="text-3xl font-bold text-green-400 mt-2">$450.000</p>
+                    <h3 className="text-gray-400 text-sm font-medium">Valor Inventario (Costo)</h3>
+                    <p className="text-3xl font-bold text-green-400 mt-2">
+                        {formatPrice(inventoryValue._sum.purchaseCost || 0)}
+                    </p>
                 </div>
             </div>
 
@@ -29,17 +52,10 @@ export default function DashboardPage() {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between py-3 border-b border-white/5">
                         <div>
-                            <p className="text-white font-medium">Nuevo insumo agregado</p>
-                            <p className="text-sm text-gray-500">Esencia de Jazmín - 500g</p>
+                            <p className="text-white font-medium">Sistema Actualizado</p>
+                            <p className="text-sm text-gray-500">Sincronización de precios y productos</p>
                         </div>
-                        <span className="text-xs text-gray-500">Hace 2 horas</span>
-                    </div>
-                    <div className="flex items-center justify-between py-3 border-b border-white/5">
-                        <div>
-                            <p className="text-white font-medium">Precio actualizado</p>
-                            <p className="text-sm text-gray-500">Perfume Floral #5</p>
-                        </div>
-                        <span className="text-xs text-gray-500">Hace 5 horas</span>
+                        <span className="text-xs text-gray-500">Reciente</span>
                     </div>
                 </div>
             </div>
