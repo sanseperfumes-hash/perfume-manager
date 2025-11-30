@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique // Mandatory finally
+  password  String
+  role      Role     @default(VIEWER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expenses     Expense[]
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  description String
+  amount      Float
+  date        DateTime @default(now())
+  payerId     String?  // If null, paid by "Sanse" (Business). If set, paid by User.
+  payer       User?    @relation(fields: [payerId], references: [id])
+}
+
+model Material {
+  id               String              @id @default(uuid())
+  name             String
+  unit             String // e.g., "g", "ml", "unit"
+  purchaseCost     Float
+  purchaseQuantity Float
+  costPerUnit      Float
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  products         ProductIngredient[]
+}
+
+model Product {
+  id           String              @id @default(uuid())
+  name         String
+  cost         Float               // Costo de materia prima
+  profitMargin Float               // Porcentaje de ganancia
+  finalPrice   Float               // Precio de venta sugerido
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  ingredients  ProductIngredient[]
+  resellerProducts ResellerProduct[]
+  sales        SaleItem[]
+}
+
+model ResellerProduct {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  profitMargin Float    // Margen específico para revendedores
+  price        Float    // Precio final para revendedores
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sales        SaleItem[]
+}
+
+model ProductIngredient {
+  id           String   @id @default(uuid())
+  productId    String
+  materialId   String
+  quantityUsed Float
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  material     Material @relation(fields: [materialId], references: [id])
+
+  @@index([productId])
+  @@index([materialId])
+}
+
+model Sale {
+  id        String     @id @default(uuid())
+  total     Float
+  createdAt DateTime   @default(now())
+  items     SaleItem[]
+}
+
+model SaleItem {
+  id                String           @id @default(uuid())
+  saleId            String
+  sale              Sale             @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId         String?
+  product           Product?         @relation(fields: [productId], references: [id])
+  resellerProductId String?
+  resellerProduct   ResellerProduct? @relation(fields: [resellerProductId], references: [id])
+  quantity          Int
+  priceAtSale       Float
+  productName       String           // Snapshot of name in case product is deleted
+
+  @@index([saleId])
+}
