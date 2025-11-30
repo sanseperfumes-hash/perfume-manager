@@ -41,6 +41,9 @@ model Material {
   purchaseCost     Float
   purchaseQuantity Float
   costPerUnit      Float
+  groupName        String?             // Para agrupar variantes (ej: "Alien")
+  supplierUrl      String?             // URL específica del producto
+  lastUpdated      DateTime?           // Última vez que se actualizó el precio
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
   products         ProductIngredient[]

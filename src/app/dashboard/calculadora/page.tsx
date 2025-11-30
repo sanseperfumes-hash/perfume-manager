@@ -227,22 +227,51 @@ export default function CalculatorPage() {
                                 </p>
                             ) : (
                                 ingredients.map((ingredient, index) => {
-                                    const material = availableMaterials.find((m) => m.id === ingredient.materialId);
-                                    const cost = material ? material.costPerUnit * ingredient.quantity : 0;
+                                    const selectedMaterial = availableMaterials.find((m) => m.id === ingredient.materialId);
+
+                                    // Find all variants for this group if it has a groupName
+                                    const variants = selectedMaterial?.groupName
+                                        ? availableMaterials.filter(m => m.groupName === selectedMaterial.groupName)
+                                        : [selectedMaterial];
+
+                                    // Unique groups for the main dropdown
+                                    // We need to filter availableMaterials to only show one per group (e.g. the first one) for the main selector
+                                    // But doing this efficiently inside the map is tricky.
+                                    // Better to prepare a "uniqueMaterials" list in state or memo.
+                                    // For now, let's just show all, but if I select one, I can switch size.
+
+                                    const cost = selectedMaterial ? selectedMaterial.costPerUnit * ingredient.quantity : 0;
 
                                     return (
                                         <div key={index} className="flex items-center gap-4 bg-black/20 p-3 rounded-lg border border-white/5">
-                                            <select
-                                                value={ingredient.materialId}
-                                                onChange={(e) => updateIngredient(index, 'materialId', e.target.value)}
-                                                className="flex-1 bg-transparent text-white border-none focus:ring-0 cursor-pointer [&>option]:bg-gray-900"
-                                            >
-                                                {availableMaterials.map((m) => (
-                                                    <option key={m.id} value={m.id}>
-                                                        {m.name} (${m.costPerUnit.toFixed(2)}/{m.unit})
-                                                    </option>
-                                                ))}
-                                            </select>
+                                            <div className="flex-1 flex gap-2">
+                                                <select
+                                                    value={ingredient.materialId}
+                                                    onChange={(e) => updateIngredient(index, 'materialId', e.target.value)}
+                                                    className="flex-1 bg-transparent text-white border-none focus:ring-0 cursor-pointer [&>option]:bg-gray-900"
+                                                >
+                                                    {availableMaterials.map((m) => (
+                                                        <option key={m.id} value={m.id}>
+                                                            {m.name} (${m.costPerUnit.toFixed(2)}/{m.unit})
+                                                        </option>
+                                                    ))}
+                                                </select>
+
+                                                {/* Size Selector if variants exist */}
+                                                {variants.length > 1 && (
+                                                    <select
+                                                        value={ingredient.materialId}
+                                                        onChange={(e) => updateIngredient(index, 'materialId', e.target.value)}
+                                                        className="w-24 bg-white/5 text-white text-sm rounded border border-white/10 focus:ring-purple-500 [&>option]:bg-gray-900"
+                                                    >
+                                                        {variants.map(v => (
+                                                            <option key={v.id} value={v.id}>
+                                                                {v.purchaseQuantity}g
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                )}
+                                            </div>
 
                                             <div className="flex items-center gap-2 w-32">
                                                 <input
@@ -252,7 +281,7 @@ export default function CalculatorPage() {
                                                     className="w-20 bg-white/5 rounded px-2 py-1 text-right text-white focus:outline-none focus:ring-1 focus:ring-purple-500"
                                                     min="0"
                                                 />
-                                                <span className="text-gray-400 text-sm">{material?.unit}</span>
+                                                <span className="text-gray-400 text-sm">{selectedMaterial?.unit}</span>
                                             </div>
 
                                             <div className="w-24 text-right font-mono text-gray-300">
