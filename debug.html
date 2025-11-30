@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="public-path" content="https://vanrossum.com.ar/">
+    <meta name="base-url" content="">
+    <meta name="storage-path" content="https://vanrossum.com.ar/storage">
+    <meta name="auth-client-path" content="https://vanrossum.com.ar/cliente/login">
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="weZPWyzHF3KdFaZ2oIgeudifloFSFSGBc3POrHEO">
+
+    <title>VanRossum</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="https://vanrossum.com.ar/favicon.png" type="image/png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
+
+    <link rel="stylesheet" type="text/css" href="https://vanrossum.com.ar/slick/slick-theme.css"/>
+    <link rel="stylesheet" type="text/css" href="https://vanrossum.com.ar/slick/slick.css"/>
+    <link href="https://vanrossum.com.ar/css/app.css?23" rel="stylesheet">
+    <link href="https://vanrossum.com.ar/timelinr/css/styles.css?23" rel="stylesheet">
+            <!-- Add the slick-theme.css if you want default styling -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-20036104-10"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-20036104-10');
+    </script>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KNFDK5X');</script>
+    <!-- End Google Tag Manager -->
+    </head>
+<!--<body class="amber lighten-5">-->
+<body class="">
+        <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KNFDK5X"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+        <header>
+    <div class="headband hide-on-med-and-down">
+        <div class="container">
+            <div class="row mgb0 d-flex d-flex-wrap">
+                <div class="col l6 d-flex">
+                                        <a href="https://vanrossum.com.ar/cliente/login" class="d-flex align-center d-flex-wrap fs25 color-white">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="fs14 mgl5">Ingresar</span>
+                    </a>
+                                    </div>
+                <div class="col l6 d-flex" style="justify-content: flex-end;">
+                    
+                    <form action="https://vanrossum.com.ar/buscar" class="mg0 d-flex transparent-search">
+                        <i class="material-icons prefix">search</i>
+                        <input type="text" name="q" placeholder="¿Qué estás buscando?">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="top-navbar">
+        <div class="container">
+            <ul class="hide-on-med-and-down">
+                <li>
+                    <a class="active" href="https://vanrossum.com.ar/productos/gruposuperrubros">
+                        PRODUCTOS
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="https://vanrossum.com.ar/destacados">
+                        DESTACADOS
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="https://vanrossum.com.ar/empresa">
+                        QUIÉNES SOMOS
+                    </a>
+                </li>
+                <li class="top-navbar-logo">
+                    <a class="" href="https://vanrossum.com.ar">
+                        <img src="https://vanrossum.com.ar/img/logos/logo-header.png">
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="https://vanrossum.com.ar/como-comprar">
+                        Modalidad de Venta
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="https://vanrossum.com.ar/contacto">
+                        CONTACTO
+                    </a>
+                </li>
+                <li>
+                    <a class="top-navbar-item-icon " href="https://vanrossum.com.ar/carrito">
+                        <i class="fas fa-shopping-cart"></i>
+                        CARRITO
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="hide-on-large-only topbar-mobile">
+            <div class="container">
+                <div class="row" style="margin: 0; width: 100%;">
+                    <div class="col s4" style="justify-content: flex-start;display: flex;align-items: center;height: 60px;">
+                        <a href="https://vanrossum.com.ar/cliente/login" style="border: none;padding: 0 !important;height: 40px;color: #F8A900;border-radius: 60px;display: flex;justify-content: center;align-items: center;font-size: 11px;">
+                            <i class="fas fa-user" style="font-size: 15px; margin-right: 6px; height: auto; line-height: 0;"></i>
+                            INGRESAR
+                        </a>        
+                    </div>
+                    <div class="col s4" style="justify-content: center; display: flex;">
+                        <a href="https://vanrossum.com.ar" class="d-flex">
+                            <img src="https://vanrossum.com.ar/img/logos/logo-header.png">
+                        </a>        
+                    </div>
+                    <div class="col s4" style="justify-content: flex-end; display: flex;">
+                        <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+                            <i class="material-icons">menu</i>
+                            MENU
+                        </a>        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<ul class="sidenav" id="mobile-demo">
+    <li class="mgt10">
+        <a href="https://vanrossum.com.ar" style="height: auto;">
+            <img class="responsive-img" src="https://vanrossum.com.ar/img/logos/logo-header.png">
+        </a>
+    </li>
+    <li>
+        <a class="active" href="https://vanrossum.com.ar/productos/gruposuperrubros">
+            PRODUCTOS
+        </a>
+    </li>
+    <li>
+        <a class="" href="https://vanrossum.com.ar/destacados">
+            DESTACADOS
+        </a>
+    </li>
+    <li>
+        <a class="" href="https://vanrossum.com.ar/empresa">
+            QUIÉNES SOMOS
+        </a>
+    </li>
+    <li>
+        <a class="" href="https://vanrossum.com.ar/como-comprar">
+            Modalidad de Venta COVID-19
+            <!--CÓMO COMPRAR-->
+        </a>
+    </li>
+    <li>
+        <a class="" href="https://vanrossum.com.ar/contacto">
+            CONTACTO
+        </a>
+    </li>
+    <li>
+        <a class="" href="https://vanrossum.com.ar/carrito">
+            <i class="fas fa-shopping-cart"></i>
+            CARRITO
+        </a>
+    </li>
+    <li>
+        <a href="https://vanrossum.com.ar/cliente/login" class="sidenav-special-btn">
+            <i class="fas fa-user"></i>
+            Area de Clientes
+        </a>
+    </li>
+</ul>
+
+<div id="search-mobile" class="search-mobile hide-on-large-only">
+    <div class="container max70">
+        <form action="https://vanrossum.com.ar/buscar" class="form-search-mobile-gray">
+            <input type="text" name="q" placeholder="¿Qué estás buscando?">
+            <button class="waves-effect waves-dark">
+                <i class="material-icons prefix">search</i>
+            </button>
+        </form>
+    </div>
+</div>
+    <div id="app">
+        <div class="container">
+    <div class="row">
+        <div class="col l3">
+            <ul class="collapsible collapsible-menu-product">
+                                <li class="active">
+                    <div class="collapsible-header drop-down">
+                        PERFUMERIA FINA
+                        <span class="badge">
+                            <i class="material-icons">chevron_right</i>
+                        </span>
+                    </div>
+                    <div class="collapsible-body">
+                        <ul class="container-sub-items">
+                                                        <li class="">
+                                <a href="https://vanrossum.com.ar/productos/00021">
+                                    SIMIL FEMENINO
+                                </a>
+                            </li>
+                                                        <li class="">
+                                <a href="https://vanrossum.com.ar/productos/00022">
+                                    SIMIL MASCULINO
+                                </a>
+                            </li>
+                                                        <li class="">
+                                <a href="https://vanrossum.com.ar/productos/00023">
+                                    BODY SPLASH.
+                                </a>
+                            </li>
+                                                        <li class="">
+                                <a href="https://vanrossum.com.ar/productos/00024">
+                                    SIMIL UNISEX.
+                                </a>
+                            </li>
+                                                        <li class="">
+                                <a href="https://vanrossum.com.ar/productos/00025">
+                                    SIMIL BEBÉ
+                                </a>
+                            </li>
+                                                    </ul>
+                    </div>
+                </li>
+                            </ul>
+        </div>
+        <div class="col l9">
+            <div class="row">
+                <div class="col s12">
+                    <div class="header-sections">
+                        <span>
+                            <a href="https://vanrossum.com.ar/productos/gruposuperrubros">PRODUCTOS</a>
+                            > <a href="https://vanrossum.com.ar/productos/superrubros/003">ESENCIAS PURAS</a>
+                            > <a href="https://vanrossum.com.ar/productos/rubros/071">PERFUMERIA FINA</a>
+                            > <a href="https://vanrossum.com.ar/productos/00021">SIMIL FEMENINO</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex d-flex-wrap">
+                <div class="col s12 m12 l5 xl5 product-item">
+                    <div class="product-item-image">
+                        <div class="container-img">
+                            <img src="https://vanrossum.com.ar/img/no-img.png">
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m12 l7 xl7 product-item d-flex d-flex-column relative">
+                    <h3 class="fs23 fw600 mgt0 color-scorpion">
+                        ALIEN GODNESS (THERRY MUGLER) 
+                    </h3>
+                    <h4 class="fs19 fw600 mgt0 color-orange">Cod: ESEPUR0701</h4>
+                    <div class="color-scorpion fs14 pdb60"></div>
+                                        <h2 class="fs26 fw600 mg0 color-orange absolute align-self-end bottom0">
+                        Desde:
+                        <span class="fs34">
+                            $20.913,70
+                                                    </span>
+                    </h2>
+                                    </div>
+            </div>
+                        <div class="row grey lighten-4 pdb25">
+                <div class="col s12 d-flex space-between pdt15 pdb10">
+                    <span class="italic fs12">Precio Final IVA incluido</span>
+                </div>
+                <div class="col s12">
+                    <form method="POST" id="form_product" action="https://vanrossum.com.ar/carrito?ESEPUR0701" style="overflow: hidden;">
+                        <input type="hidden" name="_token" value="weZPWyzHF3KdFaZ2oIgeudifloFSFSGBc3POrHEO">                        <table class="table-products">
+                            <tbody>
+                                                                                                            <thead>
+                                            <tr>
+                                                <th class="color-cerulean fw600 fs18">Presentación</th>
+                                                
+                                                <th class="right-align">Precio</th>
+                                                <th class="center-align">Unidades</th>
+                                                <th class="right-align">Total</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                                                                                                <tr>
+                                        <td>
+                                            Botella de 15 gramos
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 20.913,70
+                                            </strong>
+                                                                                        <small>($ 1.394.246,70 x KG)</small>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8259">
+                                            <input type="hidden" name="" value="20913.7005" id="price_unit_8259">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8259" data-target="price_total_8259" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8259">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                                                        <tr>
+                                        <td>
+                                            Botella de 30 gramos
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 30.534,00
+                                            </strong>
+                                                                                        <small>($ 1.017.800,09 x KG)</small>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8260">
+                                            <input type="hidden" name="" value="30534.00273" id="price_unit_8260">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8260" data-target="price_total_8260" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8260">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                                                        <tr>
+                                        <td>
+                                            Botella de 100 gramos
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 78.077,82
+                                            </strong>
+                                                                                        <small>($ 780.778,15 x KG)</small>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8261">
+                                            <input type="hidden" name="" value="78077.8152" id="price_unit_8261">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8261" data-target="price_total_8261" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8261">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                                                        <tr>
+                                        <td>
+                                            Botella de 250 gramos
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 121.996,59
+                                            </strong>
+                                                                                        <small>($ 487.986,35 x KG)</small>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8262">
+                                            <input type="hidden" name="" value="121996.58625" id="price_unit_8262">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8262" data-target="price_total_8262" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8262">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                                                        <tr>
+                                        <td>
+                                            Botella de 500 gramos
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 181.252,07
+                                            </strong>
+                                                                                        <small>($ 362.504,14 x KG)</small>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8263">
+                                            <input type="hidden" name="" value="181252.071" id="price_unit_8263">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8263" data-target="price_total_8263" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8263">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                                                        <tr>
+                                        <td>
+                                            Botella de 1 kg
+                                        </td>
+                                        
+                                        <td class="right-align">
+                                            <strong>
+                                            $ 348.561,68
+                                            </strong>
+                                                                                    </td>
+                                        <td class="center-align">
+                                            <input type="hidden" name="offer[]" value="8264">
+                                            <input type="hidden" name="" value="348561.675" id="price_unit_8264">
+                                            <input type="number" name="offer_cant[]" class="cant_ofertas center-align" size="3" style="max-width: 60px;" data-from="price_unit_8264" data-target="price_total_8264" value="0" min="0">
+                                        </td>
+                                        <td class="right-align" style="min-width: 120px;">
+                                            $ <span class="totales" id="price_total_8264">0,00</span>
+                                        </td>
+                                    </tr>
+                                                                <tr>
+                                    <td colspan="4" class="fs30 fw400" style="color: #3F3F3F;text-decoration: underline; text-align: right;">
+                                        $&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="total_cost">0,00</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">
+                                        <span class="italic fs12">Precio Final IVA incluido</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">
+                                        <button id="estandar-btn" data-id="001" class="waves-effect waves-light btn right z-depth-0"><i class="material-icons left">shopping_cart</i>AÑADIR AL CARRITO</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+                    </div>
+    </div>
+</div>
+    </div>
+    <footer style="/*overflow: hidden;*/">
+    <div class="footer-block-1">
+        <div class="container" style="position: relative;">
+            <div class="row pdt30 pdb30">
+                <div class="col m12 l2">
+                    <img class="responsive-img footer-logo" src="https://vanrossum.com.ar/img/logos/logo-footer.png">
+                </div>
+                <div class="col m12 l2">
+                    <div class="row">
+                        <div class="col s12">
+                            <h3 class="col s12 font-style-3 color-dark-gray fs16 mg0 mgt15 pd0">
+                                SEGUINOS EN
+                            </h3>
+                        </div>
+                    </div>
+                    <div  class="col s12 font-style-3 fs16 mg0 mgl20 pd0">
+                        <a class="color-yellow fs24" target="_blank" href="https://es-la.facebook.com/pages/category/Shopping---Retail/Distribuidora-Van-Rossum-207160942655875/">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a class="color-yellow fs24" target="_blank" href="https://www.instagram.com">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col m12 l4">
+                    <div class="row">
+                        <div class="col s12">
+                            <h3 class="col s12 font-style-3 color-dark-gray fs16 mg0 mgt15 pd0">
+                                MAPA DE SITIO
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col m12 l6">
+                        <ul class="footer-nav">
+                            <li><a href="https://vanrossum.com.ar">Inicio</a></li>
+                            <li><a href="https://vanrossum.com.ar/productos/gruposuperrubros">Productos</a></li>
+                            <li><a href="https://vanrossum.com.ar/destacados">Destacados</a></li>
+                            <li><a href="https://vanrossum.com.ar/empresa">Quiénes Somos</a></li>
+                        </ul>
+                    </div>
+                    <div class="col m12 l6">
+                        <ul class="footer-nav">
+                            <li><a href="https://vanrossum.com.ar/como-comprar">Cómo Comprar</a></li>
+                            <li><a href="https://vanrossum.com.ar/cliente">Área de Clientes</a></li>
+                            <li><a href="https://vanrossum.com.ar/carrito">Carrito</a></li>
+                            <li><a href="https://vanrossum.com.ar/contacto">Contacto</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col m12 l4">
+                    <div class="row">
+                        <div class="col s12">
+                            <h3 class="col s12 font-style-3 color-dark-gray fs16 mg0 mgt15 pd0">
+                                DISTRIBUIDORA VAN ROSSUM
+                            </h3>
+                        </div>
+                    </div>
+                    <table class="footer-table-info">
+                        <tr>
+                            <td class="pdr15 text-center color-blue">
+                                <i class="material-icons">place</i>
+                            </td>
+                            <td class="color-1 font-style-1">
+                                <a target="_blank" href="https://goo.gl/maps/Fg7NECFuJgu">Av. Elcano 3979, Ciudad de Buenos Aires, Argentina</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pdr15 text-center color-blue">
+                                <i class="material-icons">access_time</i>
+                            </td>
+                            <td class="color-1 font-style-1">
+                                <a>Lunes a Viernes de 8:30 a 12:30 y de 14 a 17 hs.</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pdr15 text-center color-blue"><i class="material-icons">phone</i></td>
+                            <td class="color-1 font-style-1">
+                                <a href="tel:011-4554-5787">011-4554-5787</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pdr15 text-center color-blue"><i class="fas fa-envelope"></i></td>
+                            <td class="color-1 font-style-1">
+                                <a href="/cdn-cgi/l/email-protection#93fafdf5fcd3f7fae0e7e5e1bdf0fcfebdf2e1"><span class="__cf_email__" data-cfemail="234a4d454c63474a505755510d404c4e0d4251">[email&#160;protected]</span></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-block-2">
+        <div class="container" style="position: relative; padding-bottom: 50px;">
+            <div class="row footer-copyright uppercase">
+                <div class="col s12 footer-comment">
+                    Las fotos son a modo ilustrativo. La venta de cualquiera de los productos publicados está sujeta a la verificación de stock. Los precios online y los planes de financiación para los productos presentados/publicados en <a href="https://www.vanrossum.com.ar">www.vanrossum.com.ar</a> son válidos exclusivamente para la compra vía internet en la página antes mencionadas. Las especificaciones técnicas y descripciones están sujetas a cambios sin previo aviso.
+                </div>
+                <div class="col s6" style="bottom: 5px;position: absolute;">© 2019 <span style="margin-left: 10px;">by osole</span></div>
+            </div>
+            <img src="https://vanrossum.com.ar/img/DATAWEB.jpg" style="max-width: 100%;width: 45px;position: absolute;right: 0;bottom: 0;">
+        </div>
+    </div>
+</footer>
+    <!-- Scripts -->
+    <style>
+        document.__APP_STYLES__ = 'https://vanrossum.com.ar/css/app.css';
+    </style>
+                    <style type="text/css">
+        #modal-errors {
+            background-color: transparent;
+            box-shadow: none;
+        }
+    </style>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.ckeditor.com/4.11.2/standard/ckeditor.js"></script>
+            <script src="https://vanrossum.com.ar/js/app.js?23" defer></script>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    
+    <script type="text/javascript" src="https://vanrossum.com.ar/jquery.mask.min.js"></script>
+    
+    
+    
+</body>
+</html>
