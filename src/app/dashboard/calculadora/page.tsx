@@ -15,6 +15,12 @@ export default function CalculatorPage() {
     const [availableMaterials, setAvailableMaterials] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [productTypes, setProductTypes] = useState<any[]>([]);
+    const [selectedGender, setSelectedGender] = useState('UNISEX');
+    const [selectedTypeId, setSelectedTypeId] = useState('');
+    const [showTypeModal, setShowTypeModal] = useState(false);
+    const [newTypeName, setNewTypeName] = useState('');
+
     useEffect(() => {
         const fetchMaterials = async () => {
             try {
@@ -27,8 +33,38 @@ export default function CalculatorPage() {
                 setLoading(false);
             }
         };
+        const fetchTypes = async () => {
+            try {
+                const res = await fetch('/api/product-types');
+                const data = await res.json();
+                setProductTypes(data);
+            } catch (error) {
+                console.error('Error fetching types:', error);
+            }
+        };
         fetchMaterials();
+        fetchTypes();
     }, []);
+
+    const handleCreateType = async () => {
+        if (!newTypeName) return;
+        try {
+            const res = await fetch('/api/product-types', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newTypeName }),
+            });
+            if (res.ok) {
+                const newType = await res.json();
+                setProductTypes([...productTypes, newType]);
+                setSelectedTypeId(newType.id);
+                setShowTypeModal(false);
+                setNewTypeName('');
+            }
+        } catch (error) {
+            console.error('Error creating type:', error);
+        }
+    };
 
     const addIngredient = () => {
         if (availableMaterials.length === 0) return;
@@ -74,7 +110,9 @@ export default function CalculatorPage() {
                 cost: totalCost,
                 profitMargin,
                 finalPrice,
-                ingredients
+                ingredients,
+                gender: selectedGender,
+                typeId: selectedTypeId || null
             };
 
             const res = await fetch('/api/products', {
@@ -87,6 +125,8 @@ export default function CalculatorPage() {
                 alert('Producto guardado exitosamente!');
                 setProductName('');
                 setIngredients([]);
+                setSelectedGender('UNISEX');
+                setSelectedTypeId('');
                 // Optionally redirect to price list
             } else {
                 alert('Error al guardar el producto');
@@ -98,7 +138,7 @@ export default function CalculatorPage() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto relative">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white flex items-center gap-3">
                     <CalculatorIcon className="w-8 h-8 text-purple-400" />
@@ -111,7 +151,7 @@ export default function CalculatorPage() {
                 {/* Left Column: Builder */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Product Info */}
-                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-xl">
+                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-xl space-y-4">
                         <h2 className="text-xl font-semibold text-white mb-4">Información del Producto</h2>
                         <div>
                             <label className="block text-sm font-medium text-gray-300 mb-2">Nombre del Perfume</label>
@@ -122,6 +162,44 @@ export default function CalculatorPage() {
                                 placeholder="Ej: Ocean Breeze 50ml"
                                 className="w-full px-4 py-2 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Género</label>
+                                <select
+                                    value={selectedGender}
+                                    onChange={(e) => setSelectedGender(e.target.value)}
+                                    className="w-full px-4 py-2 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 [&>option]:bg-gray-900"
+                                >
+                                    <option value="MALE">Masculino</option>
+                                    <option value="FEMALE">Femenino</option>
+                                    <option value="UNISEX">Unisex</option>
+                                    <option value="OTHER">Otro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Tipo</label>
+                                <div className="flex gap-2">
+                                    <select
+                                        value={selectedTypeId}
+                                        onChange={(e) => setSelectedTypeId(e.target.value)}
+                                        className="w-full px-4 py-2 bg-black/20 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 [&>option]:bg-gray-900"
+                                    >
+                                        <option value="">Seleccionar Tipo...</option>
+                                        {productTypes.map(t => (
+                                            <option key={t.id} value={t.id}>{t.name}</option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        onClick={() => setShowTypeModal(true)}
+                                        className="px-3 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors"
+                                        title="Crear nuevo tipo"
+                                    >
+                                        <Plus className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -249,6 +327,37 @@ export default function CalculatorPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Modal for New Type */}
+            {showTypeModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+                        <h3 className="text-lg font-bold text-white mb-4">Crear Nuevo Tipo</h3>
+                        <input
+                            type="text"
+                            value={newTypeName}
+                            onChange={(e) => setNewTypeName(e.target.value)}
+                            placeholder="Ej: Cítrico, Amaderado..."
+                            className="w-full px-4 py-2 bg-black/40 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-purple-500 outline-none mb-4"
+                            autoFocus
+                        />
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowTypeModal(false)}
+                                className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleCreateType}
+                                className="flex-1 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg transition-colors font-medium"
+                            >
+                                Crear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

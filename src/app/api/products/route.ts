@@ -16,35 +16,38 @@ export async function GET() {
         return NextResponse.json(products);
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching products' }, { status: 500 });
-    }
-}
+        export async function POST(request: Request) {
+            try {
+                const body = await request.json();
+                const { name, cost, profitMargin, finalPrice, ingredients, gender, typeId } = body;
 
-export async function POST(request: Request) {
-    try {
-        const body = await request.json();
-        const { name, cost, profitMargin, finalPrice, ingredients } = body;
-
-        const product = await prisma.product.create({
-            data: {
-                name,
-                cost,
-                profitMargin,
-                finalPrice,
-                ingredients: {
-                    create: ingredients.map((ing: any) => ({
-                        materialId: ing.materialId,
-                        quantityUsed: Number(ing.quantity)
-                    }))
+                if (!name || !ingredients || ingredients.length === 0) {
+                    return NextResponse.json({ error: 'Name and ingredients are required' }, { status: 400 });
                 }
-            },
-            include: {
-                ingredients: true
-            }
-        });
 
-        return NextResponse.json(product);
-    } catch (error) {
-        console.error('Error creating product:', error);
-        return NextResponse.json({ error: 'Error creating product' }, { status: 500 });
-    }
-}
+                const product = await prisma.product.create({
+                    data: {
+                        name,
+                        cost,
+                        profitMargin,
+                        finalPrice,
+                        gender: gender || 'UNISEX',
+                        typeId: typeId || null,
+                        ingredients: {
+                            create: ingredients.map((i: any) => ({
+                                materialId: i.materialId,
+                                quantityUsed: Number(i.quantity)
+                            }))
+                        }
+                    },
+                    include: {
+                        ingredients: true
+                    }
+                });
+
+                return NextResponse.json(product);
+            } catch (error) {
+                console.error('Error creating product:', error);
+                return NextResponse.json({ error: 'Error creating product' }, { status: 500 });
+            }
+        }

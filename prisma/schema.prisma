@@ -46,17 +46,33 @@ model Material {
   products         ProductIngredient[]
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  UNISEX
+  OTHER
+}
+
 model Product {
   id           String              @id @default(uuid())
   name         String
   cost         Float               // Costo de materia prima
   profitMargin Float               // Porcentaje de ganancia
   finalPrice   Float               // Precio de venta sugerido
+  gender       Gender              @default(UNISEX)
+  typeId       String?
+  type         ProductType?        @relation(fields: [typeId], references: [id])
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   ingredients  ProductIngredient[]
   resellerProducts ResellerProduct[]
   sales        SaleItem[]
+}
+
+model ProductType {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  products  Product[]
 }
 
 model ResellerProduct {
