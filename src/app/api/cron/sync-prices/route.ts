@@ -25,19 +25,57 @@ export async function GET(request: Request) {
             for (const variant of product.variants) {
                 // Construct a unique name for the material, e.g., "Alien (30g)"
                 const materialName = `${product.groupName} (${variant.size})`;
+
+                // Calculate quantity from size string (e.g., "30g" -> 30)
+                const quantity = parseInt(variant.size.replace('g', ''));
+
+                // Upsert material
+                const existing = await prisma.material.findFirst({
+                    where: {
+                        name: materialName
+                    }
+                });
+
+                if (existing) {
+                    await prisma.material.update({
+                        where: { id: existing.id },
+                        data: {
+                            purchaseCost: variant.price,
+                            purchaseQuantity: quantity,
+                            costPerUnit: variant.price / quantity,
+                            lastUpdated: new Date(),
+                            supplierUrl: product.url,
+                            groupName: product.groupName
+                        }
+                    });
+                    updatedCount++;
+                } else {
+                    await prisma.material.create({
+                        data: {
+                            name: materialName,
+                            unit: 'g',
+                            purchaseCost: variant.price,
+                            purchaseQuantity: quantity,
+                            costPerUnit: variant.price / quantity,
+                            groupName: product.groupName,
+                            supplierUrl: product.url,
+                            lastUpdated: new Date()
+                        }
+                    });
+                    createdCount++;
+                }
             }
         }
-    }
 
         return NextResponse.json({
-        success: true,
-        scraped: products.length,
-        updated: updatedCount,
-        created: createdCount
-    });
+            success: true,
+            scraped: products.length,
+            updated: updatedCount,
+            created: createdCount
+        });
 
-} catch (error) {
-    console.error('Sync failed:', error);
-    return NextResponse.json({ error: 'Sync failed' }, { status: 500 });
-}
+    } catch (error) {
+        console.error('Sync failed:', error);
+        return NextResponse.json({ error: 'Sync failed' }, { status: 500 });
+    }
 }
