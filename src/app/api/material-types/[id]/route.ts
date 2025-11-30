@@ -5,8 +5,9 @@ const prisma = new PrismaClient();
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
+    const params = await props.params;
     try {
         await prisma.materialType.delete({
             where: { id: params.id },

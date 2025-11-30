@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 
 export async function PUT(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
+    const params = await props.params;
     try {
         const user = await getUserFromRequest(request);
         if (!user) {
@@ -50,8 +51,9 @@ export async function PUT(
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    props: { params: Promise<{ id: string }> }
 ) {
+    const params = await props.params;
     try {
         const user = await getUserFromRequest(request);
         if (!user) {
