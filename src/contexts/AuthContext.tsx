@@ -50,8 +50,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     const logout = async () => {
-        // Implement logout logic (clear cookie via API if needed)
-        // For now just client side clear and redirect
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
         setUser(null);
         router.push('/login');
     };
