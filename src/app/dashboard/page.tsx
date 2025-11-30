@@ -27,7 +27,7 @@ export default async function DashboardPage() {
                     <h1 className="text-3xl font-bold text-white flex items-center gap-3">
                         Panel de Control
                         <span className="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full border border-green-500/20">
-                            v2.1 (Live Data)
+                            v2.1.1 (Force Update)
                         </span>
                     </h1>
                     <p className="text-gray-400 mt-2">Bienvenido al sistema de gestión de perfumes.</p>
