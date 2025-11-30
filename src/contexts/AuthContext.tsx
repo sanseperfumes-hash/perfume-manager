@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 interface User {
     id: string;
     username: string;
-    role: 'ADMIN' | 'EDITOR' | 'VIEWER';
+    role: 'ADMIN' | 'EDITOR' | 'VIEWER' | 'SIN_ACCESO_FRONTEND';
 }
 
 interface AuthContextType {
@@ -35,6 +35,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const res = await fetch('/api/auth/me');
             if (res.ok) {
                 const data = await res.json();
+                if (data.user.role === 'SIN_ACCESO_FRONTEND') {
+                    await fetch('/api/auth/logout', { method: 'POST' });
+                    setUser(null);
+                    router.push('/login?error=no_access');
+                    return;
+                }
                 setUser(data.user);
             } else {
                 setUser(null);

@@ -10,7 +10,8 @@ export async function GET() {
                     include: {
                         material: true
                     }
-                }
+                },
+                type: true
             }
         });
         return NextResponse.json(products);

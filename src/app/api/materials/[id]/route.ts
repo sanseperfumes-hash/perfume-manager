@@ -45,8 +45,16 @@ export async function DELETE(
         });
 
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error deleting material:', error);
+
+        if (error.code === 'P2003') {
+            return NextResponse.json(
+                { error: 'No se puede eliminar el insumo porque está siendo usado en uno o más productos.' },
+                { status: 400 }
+            );
+        }
+
         return NextResponse.json(
             { error: 'Error al eliminar insumo' },
             { status: 500 }

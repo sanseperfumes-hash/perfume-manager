@@ -2,19 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FlaskConical, Calculator, Users, LogOut, Tag, DollarSign } from 'lucide-react';
+import { LayoutDashboard, FlaskConical, Calculator, Users, LogOut, Tag, DollarSign, Package } from 'lucide-react';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'Insumos', href: '/dashboard/insumos', icon: FlaskConical, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
+    { name: 'Inventario', href: '/dashboard/inventario', icon: Package, roles: ['ADMIN', 'EDITOR'] },
     { name: 'Armador de Productos', href: '/dashboard/calculadora', icon: Calculator, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'Lista de Precios', href: '/dashboard/precios', icon: Tag, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'Revendedores', href: '/dashboard/revendedores', icon: Users, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'Ventas y Gastos', href: '/dashboard/ventas', icon: DollarSign, roles: ['ADMIN', 'EDITOR', 'VIEWER'] },
     { name: 'Usuarios', href: '/dashboard/usuarios', icon: Users, roles: ['ADMIN'] }, // Only ADMIN
 ];
-
 function SidebarContent() {
     const pathname = usePathname();
     const { user, logout } = useAuth();

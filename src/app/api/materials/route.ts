@@ -5,6 +5,9 @@ export async function GET() {
     try {
         const materials = await prisma.material.findMany({
             orderBy: { createdAt: 'desc' },
+            include: {
+                type: true
+            }
         });
         return NextResponse.json(materials);
     } catch (error) {
@@ -18,7 +21,7 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const body = await request.json();
-        const { name, type, unit, purchaseCost, purchaseQuantity } = body;
+        const { name, unit, purchaseCost, purchaseQuantity, supplier, typeId, priceStatus } = body;
 
         // Calculate cost per unit
         const costPerUnit = Number(purchaseCost) / Number(purchaseQuantity);
@@ -30,6 +33,9 @@ export async function POST(request: Request) {
                 purchaseCost: Number(purchaseCost),
                 purchaseQuantity: Number(purchaseQuantity),
                 costPerUnit,
+                supplier: supplier || "Otro",
+                typeId: typeId || null,
+                priceStatus: priceStatus || "available",
             },
         });
 

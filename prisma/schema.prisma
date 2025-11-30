@@ -11,7 +11,7 @@ datasource db {
 enum Role {
   ADMIN
   EDITOR
-  VIEWER
+  SIN_ACCESO_FRONTEND
 }
 
 model User {
@@ -19,7 +19,7 @@ model User {
   username  String   @unique
   email     String   @unique // Mandatory finally
   password  String
-  role      Role     @default(VIEWER)
+  role      Role     @default(EDITOR)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expenses     Expense[]
@@ -32,6 +32,15 @@ model Expense {
   date        DateTime @default(now())
   payerId     String?  // If null, paid by "Sanse" (Business). If set, paid by User.
   payer       User?    @relation(fields: [payerId], references: [id])
+  relatedExpenseId String?  // Para vincular devolución con gasto original
+  relatedExpense   Expense? @relation("ExpenseToRefund", fields: [relatedExpenseId], references: [id])
+  refunds          Expense[] @relation("ExpenseToRefund")
+}
+
+model MaterialType {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  materials Material[]
 }
 
 model Material {
@@ -43,10 +52,16 @@ model Material {
   costPerUnit      Float
   groupName        String?             // Para agrupar variantes (ej: "Alien")
   supplierUrl      String?             // URL específica del producto
+  supplier         String              @default("Otro") // Proveedor (ej: "Van Rossum", "Otro")
+  priceStatus      String              @default("available") // "available" o "consultar"
+  gender           Gender?             // Género de la esencia (MALE, FEMALE, UNISEX)
   lastUpdated      DateTime?           // Última vez que se actualizó el precio
+  typeId           String?
+  type             MaterialType?       @relation(fields: [typeId], references: [id])
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
   products         ProductIngredient[]
+  inventoryItems   InventoryItem[]
 }
 
 enum Gender {
@@ -121,4 +136,18 @@ model SaleItem {
   productName       String           // Snapshot of name in case product is deleted
 
   @@index([saleId])
+}
+
+model InventoryItem {
+  id            String   @id @default(uuid())
+  materialId    String
+  material      Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  quantity      Float    // Cantidad en stock
+  minStock      Float    @default(0) // Stock mínimo para alerta
+  unit          String   // Unidad (heredada de material)
+  lastRestocked DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([materialId])
 }
